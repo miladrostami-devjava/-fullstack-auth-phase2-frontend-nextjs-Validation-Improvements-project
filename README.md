@@ -171,8 +171,8 @@ utils/
 ## 👨‍💻 Author
 
 **Milad Rostami**
-📧 [miladrostami.dev@gmail.com](mailto:miladrostami.dev@gmail.com)
-🔗 [LinkedIn](https://linkedin.com/in/miladrostami-devjava)
+📧 [miladrostami-Email](miladrostami24@gmail.com)
+🔗 [LinkedIn](https://www.linkedin.com/in/milad-rostami-07798484/)
 
 ---
 

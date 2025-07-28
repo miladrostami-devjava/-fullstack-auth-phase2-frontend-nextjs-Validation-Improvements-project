@@ -1,32 +1,120 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getProfile } from "@/services/api";
 import { useRouter } from "next/navigation";
+import Container from "@/components/Container";
+import axios from "axios";
 
 export default function ProfilePage() {
-    const [message, setMessage] = useState("");
+    const [user, setUser] = useState({ name: "", email: "", role: "" });
+    const [oldPassword, setOldPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [file, setFile] = useState<File | null>(null);
     const router = useRouter();
 
+    const token = typeof window !== "undefined" ? localStorage.getItem("jwt") : null;
+
     useEffect(() => {
-        const token = localStorage.getItem("jwt");
         if (!token) {
             router.push("/login");
             return;
         }
 
-        getProfile(token)
-            .then((res) => setMessage(res.data))
+        // axios.get("http://localhost:9090/api/profile",
+        //     {
+        //         headers: {Authorization: `Bearer ${token}`},
+        //     })
+        axios.get("http://localhost:9090/api/user/profile", {
+            headers: { Authorization: `Bearer ${token}` },
+        })
+            .then(res => setUser(res.data))
             .catch(() => {
                 localStorage.removeItem("jwt");
                 router.push("/login");
             });
     }, []);
 
+    const handleUpdate = async () => {
+        await axios.put("http://localhost:9090/api/profile", user, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        alert("Updated!");
+    };
+
+    const handlePasswordChange = async () => {
+        await axios.put("http://localhost:9090/api/profile/password", {
+            oldPassword,
+            newPassword
+        }, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        alert("Password changed!");
+    };
+
+    const handleDeleteAccount = async () => {
+        await axios.delete("http://localhost:9090/api/profile", {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        localStorage.removeItem("jwt");
+        router.push("/register");
+    };
+
+    const handleUpload = async () => {
+        if (!file) return;
+        const formData = new FormData();
+        formData.append("file", file);
+
+        await axios.post("http://localhost:9090/api/profile/photo", formData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data",
+            },
+        });
+
+        alert("Photo uploaded");
+    };
+
     return (
-        <div className="max-w-lg mx-auto mt-20 bg-white p-6 rounded shadow">
-            <h1 className="text-xl font-bold mb-4">Profile Page</h1>
-            <p>{message}</p>
-        </div>
+        <Container>
+            <div className="max-w-xl mx-auto bg-white p-6 mt-10 rounded shadow space-y-4">
+                <h1 className="text-2xl font-bold">Profile</h1>
+
+                <div>
+                    <label>Name:</label>
+                    <input className="border p-2 w-full" value={user.name} onChange={e => setUser({ ...user, name: e.target.value })} />
+                </div>
+
+                <div>
+                    <label>Email:</label>
+                    <input className="border p-2 w-full" value={user.email} onChange={e => setUser({ ...user, email: e.target.value })} />
+                </div>
+
+                <div>
+                    <label>Role:</label>
+                    <input className="border p-2 w-full" value={user.role} disabled />
+                </div>
+
+                <button onClick={handleUpdate} className="bg-blue-500 text-white px-4 py-2 rounded">Update</button>
+
+                <div className="mt-6">
+                    <h2 className="font-semibold">Change Password</h2>
+                    <input type="password" placeholder="Old Password" className="border p-2 w-full mt-2"
+                           onChange={e => setOldPassword(e.target.value)} />
+                    <input type="password" placeholder="New Password" className="border p-2 w-full mt-2"
+                           onChange={e => setNewPassword(e.target.value)} />
+                    <button onClick={handlePasswordChange} className="bg-yellow-500 text-white px-4 py-2 mt-2 rounded">Change Password</button>
+                </div>
+
+                <div className="mt-6">
+                    <h2 className="font-semibold">Upload Photo</h2>
+                    <input type="file" onChange={e => setFile(e.target.files?.[0] || null)} />
+                    <button onClick={handleUpload} className="bg-purple-500 text-white px-4 py-2 mt-2 rounded">Upload</button>
+                </div>
+
+                <div className="mt-6">
+                    <button onClick={handleDeleteAccount} className="bg-red-500 text-white px-4 py-2 rounded">Delete Account</button>
+                </div>
+            </div>
+        </Container>
     );
 }

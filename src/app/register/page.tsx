@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { register } from "@/services/api";
 import { useRouter } from "next/navigation";
+import Container from "@/components/Container";
 
 export default function RegisterPage() {
     const [form, setForm] = useState({ username: "", password: "" });
@@ -28,24 +29,26 @@ export default function RegisterPage() {
 
 
     return (
-        <div className="max-w-sm mx-auto mt-20 bg-white p-6 rounded shadow">
-            <h1 className="text-xl mb-4 font-bold">Register</h1>
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <input
-                    placeholder="Username"
-                    className="w-full p-2 border rounded"
-                    value={form.username}
-                    onChange={(e) => setForm({ ...form, username: e.target.value })}
-                />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    className="w-full p-2 border rounded"
-                    value={form.password}
-                    onChange={(e) => setForm({ ...form, password: e.target.value })}
-                />
-                <button className="bg-blue-600 text-white w-full p-2 rounded">Register</button>
-            </form>
-        </div>
+        <Container>
+            <div className="max-w-sm mx-auto mt-20 bg-white p-6 rounded shadow">
+                <h1 className="text-xl mb-4 font-bold">Register</h1>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <input
+                        placeholder="Username"
+                        className="w-full p-2 border rounded"
+                        value={form.username}
+                        onChange={(e) => setForm({...form, username: e.target.value})}
+                    />
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        className="w-full p-2 border rounded"
+                        value={form.password}
+                        onChange={(e) => setForm({...form, password: e.target.value})}
+                    />
+                    <button className="bg-blue-600 text-white w-full p-2 rounded">Register</button>
+                </form>
+            </div>
+        </Container>
     );
 }

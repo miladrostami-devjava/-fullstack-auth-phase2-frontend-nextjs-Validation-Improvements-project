@@ -5,7 +5,6 @@ import {useRouter} from "next/navigation";
 import Container from "@/components/Container";
 import axios from "axios";
 import LogoutButton from "@/components/LogoutButton";
-import ProfilePhoto from "@/components/ProfilePhoto";
 
 type UserType = {
     username: string;
@@ -143,11 +142,13 @@ export default function ProfilePage() {
                  {user.profilePhoto && (
                      <div className="mt-6">
                          <h2 className="font-semibold">Your Photo</h2>
-                         <ProfilePhoto filename={user.profilePhoto} token={token} />
-
+                         <img
+                             src={`http://localhost:9090/api/profile/photo/${user.profilePhoto}`}
+                             alt="Profile"
+                             className="w-32 h-32 object-cover rounded-full border mt-2"
+                         />
                      </div>
                  )}
-
              </div>
 
                 <div>

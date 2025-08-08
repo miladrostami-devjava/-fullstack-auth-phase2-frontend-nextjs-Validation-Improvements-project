@@ -3,6 +3,70 @@
 
 
 
+# Validation Improvements in Frontend
+## Summary of Changes:
+Added utility functions for validating email format (isValidEmail) and password strength (isValidPassword) using regular expressions.
+
+Implemented client-side validation in React form components during form submission (onSubmit event).
+
+Display inline error messages dynamically to users when validation rules fail.
+
+Managed error states separately for each form field.
+
+Prevented form submission to backend if validation fails on the frontend.
+
+## Technical Details:
+Email validation uses a simple regex pattern:
+
+js
+Copy
+Edit
+function isValidEmail(email) {
+const emailRegex = /^[\w.-]+@[\w.-]+\.\w{2,}$/;
+return emailRegex.test(email);
+}
+## Password validation enforces the following rules:
+
+Minimum 8 characters
+
+At least one uppercase letter
+
+At least one lowercase letter
+
+At least one digit
+
+At least one special character
+
+js
+Copy
+Edit
+function isValidPassword(password) {
+const minLength = 8;
+const hasUpperCase = /[A-Z]/.test(password);
+const hasLowerCase = /[a-z]/.test(password);
+const hasNumber = /\d/.test(password);
+const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+return password.length >= minLength && hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar;
+}
+Validation runs inside the form submission handler (handleSubmit), showing error messages when validation fails.
+
+## Important Notes:
+Frontend validation improves user experience by preventing invalid requests.
+
+Always complement frontend validation with backend validation for security reasons.
+
+
+
+
+
+
+
+
+
+
+
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

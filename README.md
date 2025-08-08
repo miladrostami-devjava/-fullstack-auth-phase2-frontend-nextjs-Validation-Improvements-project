@@ -15,6 +15,11 @@ Managed error states separately for each form field.
 
 Prevented form submission to backend if validation fails on the frontend.
 
+# Backend Project
+[Backend Project Repository](https://github.com/miladrostami-devjava/fullstack-auth-phase2-backend-spring-jwt-Validation-Improvements-project-)
+
+
+
 ## Technical Details:
 Email validation uses a simple regex pattern:
 
